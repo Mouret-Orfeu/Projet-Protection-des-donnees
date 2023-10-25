@@ -100,7 +100,7 @@ def display_images_from_directory(directory):
         
         # If HTML file, use components.html
         if file_name.endswith('.html'):
-            with open(file_path, 'r') as f:
+            with open(file_path, 'r',encoding="utf-8") as f:
                 html_code = f.read()
                 components.html(html_code, height=600)  # Set a suitable height value
         
