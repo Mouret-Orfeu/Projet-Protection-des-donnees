@@ -18,7 +18,38 @@ def main():
 
 def show_network():
     st.header("Network Page")
-    st.write("no content for now")
+    root_directory = 'images/network'
+
+    # Add a sidebar selection for Dataset Exploration or Results
+    network_page_selection = st.sidebar.selectbox("Choose a section:", ["Dataset Exploration", "Results"])
+
+    # Depending on the selection, display the appropriate selectbox and content
+    if network_page_selection == "Dataset Exploration":
+        dataset_exploration_directory = os.path.join(root_directory, "Dataset_exploration")
+        dataset_subdirectories = [d for d in os.listdir(dataset_exploration_directory) if os.path.isdir(os.path.join(dataset_exploration_directory, d))]
+        image_type_dataset = st.selectbox("Choose an exploration visualization:", [""] + dataset_subdirectories)
+
+        if image_type_dataset:
+            st.subheader(image_type_dataset)
+            display_images_from_directory(os.path.join(dataset_exploration_directory, image_type_dataset))
+            
+    elif network_page_selection == "Results":
+        results_directory = os.path.join(root_directory, "Results")
+        results_subdirectories = [d for d in os.listdir(results_directory) if os.path.isdir(os.path.join(results_directory, d))]
+        image_type_results = st.selectbox("Choose a model:", [""] + results_subdirectories)
+
+        if image_type_results == "KNN":
+            st.subheader(image_type_results)
+            # Display images from KNN/Confusion_matrix directory
+            display_images_from_directory(os.path.join(results_directory, image_type_results, "Confusion_matrix"))
+        elif image_type_results == "Random_forest":
+            st.subheader(image_type_results)
+            # Display images from Random_forest/Confusion_matrix directory
+            display_images_from_directory(os.path.join(results_directory, image_type_results, "Confusion_matrix"))
+        elif image_type_results:
+            st.subheader(image_type_results)
+            display_images_from_directory(os.path.join(results_directory, image_type_results))
+
 
 def show_physical():
     st.header("Physical Page")
