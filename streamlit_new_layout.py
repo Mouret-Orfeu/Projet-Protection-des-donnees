@@ -3,6 +3,17 @@ import os
 import pandas as pd
 import plotly.express as px
 import streamlit.components.v1 as components
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+
+df_dict = {
+    0: "df Normal",
+    1: "df Attack 1",
+    2: "df Attack 2",
+    3: "df Attack 3",
+    4: "df Attack 4",
+    5: "df All Data"
+}
 
 # Set page layout to wide mode
 st.set_page_config(layout="wide")
@@ -35,27 +46,75 @@ def display_images_from_directory(directory, image_type):
                                 y=df.columns, 
                                 color_continuous_scale='RdBu_r', # Red-Blue color scale, can be adjusted
                                 zmin=-1, zmax=1)  # Scale for correlation ranges from -1 to 1
-                fig.update_layout(xaxis_title='Features', yaxis_title='Features')
+                fig.update_layout(xaxis_title='Features', yaxis_title='Features', plot_bgcolor='white')
                 st.plotly_chart(fig, use_container_width=True)
 
             # pour print les histogrammes
             elif image_type == "label" or image_type == "Labels_in_dataset":
 
                 # Create a bar plot for histogram data
-                fig = px.bar(df, x='label', y='Frequency')  # Directly use the column names
-                fig.update_layout(title='Histogram Title', xaxis_title='Label', yaxis_title='Frequency')
+                if 'label' in df.columns:
+                    x_col = 'label'
+                elif 'Label' in df.columns:
+                    x_col = 'Label'
+                else:
+                    st.error("Required column 'Label' not found in the CSV file.")
+                    continue  # Skip this iteration
+
+                fig = px.bar(df, x=x_col, y='Frequency')
+                fig.update_layout(title='Histogram Title', xaxis_title='Label', yaxis_title='Frequency', plot_bgcolor='white')
                 st.plotly_chart(fig, use_container_width=True)  # Display the figure in Streamlit
 
+            elif image_type == "Flow_in_datasets":
+                # Create a single figure for all flow sensor curves
+                fig = go.Figure()
 
-            # pour print les courbes
-            else:
+                # Loop through each Flow_sensor and add a trace to the figure
+                for j in range(1, 5):
+                    # Extract the data for the current sensor
+                    sensor_data = df[f'Flow_sensor_{j}']
+                    fig.add_trace(
+                        go.Scatter(x=df.index, y=sensor_data, mode='lines', name=f'Flow_sensor_{j}')
+                    )
 
-                # Create a line or scatter plot for other time series data
-                x_col = df.columns[0]  # Typically 'Time' 
-                y_col = df.columns[1]
-                fig = px.line(df, x=x_col, y=y_col)  # Use px.scatter for scatter plot
-                fig.update_layout(title=file_name.replace('.csv', ''), xaxis_title=x_col, yaxis_title=y_col)
-                st.plotly_chart(fig, use_container_width=True) 
+                # Update layout for the figure
+                fig.update_layout( 
+                    title_text="Flow Sensors Over Time",
+                    plot_bgcolor='white', 
+                    legend=dict(
+                        title='Flow Sensors',
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    ),
+                    height=600,  # Adjust the height as needed
+                    xaxis_title="Index"
+                )
+
+                # Display the figure in Streamlit
+                st.plotly_chart(fig, use_container_width=True)
+
+
+
+                
+                
+
+
+
+
+            # # pour print les courbes
+            # else:
+
+            #         # Create a line or scatter plot for other time series data
+            #         x_col = df.columns[0]  # Typically 'Time' 
+            #         y_col = df.columns[1]
+            #         fig = px.line(df, x=x_col, y=y_col)  # Use px.scatter for scatter plot
+            #         fig.update_layout(title=file_name.replace('.csv', ''), xaxis_title=x_col, yaxis_title=y_col, plot_bgcolor='white')
+            #         st.plotly_chart(fig, use_container_width=True) 
+                
+
         
         # If PNG image, use st.image
         elif file_name.endswith('.png'):
