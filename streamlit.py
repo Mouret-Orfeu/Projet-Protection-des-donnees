@@ -224,9 +224,10 @@ def results_page():
         st.write(f"Selected Dataset in Curve 1: {selected_dataset_1}")
         st.write(f"Selected Attack Category in Curve 1: {selected_attack_1}")
         directory = "images/physical/Dataset_exploration/Heatmaps"
-        with open(os.path.join(directory, f"Heatmap_{df_dict[1]}.pkl"), 'rb') as f:
-            fig = pickle.load(f)
-        st.plotly_chart(fig, use_container_width=True)
+        if selected_model_1 == "KNN":
+            with open(os.path.join(directory, f"Heatmap_{df_dict[1]}.pkl"), 'rb') as f:
+                fig = pickle.load(f)
+            st.plotly_chart(fig, use_container_width=True)
     with col2:
         st.subheader("Curve 2")
         st.write(f"Selected Model in Curve 2: {selected_model_2}")
