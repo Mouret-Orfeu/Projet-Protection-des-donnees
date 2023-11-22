@@ -1,5 +1,29 @@
 # Projet-Protection-des-donnees
 
-Pour installer toutes les bibliothèques requises, taper `pip install -r requirements.txt` dans le terminal. 
+## Installation des dépendances
 
-Pour lancer la webapp taper `streamlit run streamlit.py` dans le terminal depuis la racine du projet.
+```bash
+pip install -r requirements.txt
+```
+
+## Exéuter et voir notre exploration des données
+
+- `physical_exploration.ipynb` : exploration des données physiques
+- `network_exploration.ipynb` : exploration des données réseau
+
+## Exécuter et voir notre preprocessing
+
+- `physical_preparation.ipynb` : preprocessing des données physiques
+- `network_preparation.ipynb` : preprocessing des données réseau
+
+## Exécuter et voir les résultats des modèles
+
+- `physical_detection.ipynb` : résultats des modèles sur les données physiques
+- `network_detection.ipynb` : résultats des modèles sur les données réseau
+
+## Lancer la webapp
+
+Depuis la racine du projet, lancer la commande
+```bash
+streamlit run streamlit.py
+```
