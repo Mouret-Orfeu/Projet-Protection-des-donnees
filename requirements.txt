@@ -1,3 +1,7 @@
 streamlit
 pandas
 plotly
+numpy
+pickle
+sklearn
+xgboost
