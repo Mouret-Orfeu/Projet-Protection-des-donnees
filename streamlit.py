@@ -20,84 +20,82 @@ df_dict = {
 st.set_page_config(layout="wide")
 
 # Function to display images from a directory
-# def display_images_from_directory(directory, image_type):
-#     for file_name in sorted(os.listdir(directory)):
-#         file_path = os.path.join(directory, file_name)
+def display_images_from_directory(directory, image_type):
+    for file_name in sorted(os.listdir(directory)):
+        file_path = os.path.join(directory, file_name)
 
-#         df = pd.read_csv(file_path)
-#         # Strip leading/trailing spaces from column names
-#         df.columns = df.columns.str.strip()
+        df = pd.read_csv(file_path)
+        # Strip leading/trailing spaces from column names
+        df.columns = df.columns.str.strip()
 
-#         # If HTML file, use components.html
-#         if file_name.endswith('.html'):
-#             with open(file_path, 'r', encoding="utf-8") as f:
-#                 html_code = f.read()
-#                 components.html(html_code, height=600)  # Set a suitable height value
+        # If HTML file, use components.html
+        if file_name.endswith('.html'):
+            with open(file_path, 'r', encoding="utf-8") as f:
+                html_code = f.read()
+                components.html(html_code, height=600)  # Set a suitable height value
 
-#          # Check if the directory is not for correlation matrices and the file is a CSV
-#         elif file_name.endswith('.csv'):
-
-
-#             # pour print les matrices de correlation
-#             if image_type == "Correlation_matrix":
-#                 df = pd.read_csv(file_path, index_col=0)
-#                 # Create a heatmap for the correlation matrix
-#                 fig = px.imshow(df,
-#                                 x=df.columns,
-#                                 y=df.columns,
-#                                 color_continuous_scale='RdBu_r', # Red-Blue color scale, can be adjusted
-#                                 zmin=-1, zmax=1)  # Scale for correlation ranges from -1 to 1
-#                 fig.update_layout(xaxis_title='Features', yaxis_title='Features', plot_bgcolor='white')
-#                 st.plotly_chart(fig, use_container_width=True)
-
-#             # pour print les histogrammes
-#             elif image_type == "label" or image_type == "Labels_in_dataset":
-
-#                 # Create a bar plot for histogram data
-#                 if 'label' in df.columns:
-#                     x_col = 'label'
-#                 elif 'Label' in df.columns:
-#                     x_col = 'Label'
-#                 else:
-#                     st.error("Required column 'Label' not found in the CSV file.")
-#                     continue  # Skip this iteration
-
-#                 fig = px.bar(df, x=x_col, y='Frequency')
-#                 fig.update_layout(title='Histogram Title', xaxis_title='Label', yaxis_title='Frequency', plot_bgcolor='white')
-#                 st.plotly_chart(fig, use_container_width=True)  # Display the figure in Streamlit
-
-#             elif image_type == "Flow_in_datasets":
-#                 # Create a single figure for all flow sensor curves
-#                 fig = go.Figure()
-
-#                 # Loop through each Flow_sensor and add a trace to the figure
-#                 for j in range(1, 5):
-#                     # Extract the data for the current sensor
-#                     sensor_data = df[f'Flow_sensor_{j}']
-#                     fig.add_trace(
-#                         go.Scatter(x=df.index, y=sensor_data, mode='lines', name=f'Flow_sensor_{j}')
-#                     )
-
-#                 # Update layout for the figure
-#                 fig.update_layout(
-#                     title_text="Flow Sensors Over Time",
-#                     plot_bgcolor='white',
-#                     legend=dict(
-#                         title='Flow Sensors',
-#                         orientation="h",
-#                         yanchor="bottom",
-#                         y=1.02,
-#                         xanchor="right",
-#                         x=1
-#                     ),
-#                     height=600,  # Adjust the height as needed
-#                     xaxis_title="Index"
-#                 )
-
-#                 # Display the figure in Streamlit
-#                 st.plotly_chart(fig, use_container_width=True)
+         # Check if the directory is not for correlation matrices and the file is a CSV
+        elif file_name.endswith('.csv'):
 
 
+            # pour print les matrices de correlation
+            if image_type == "Correlation_matrix":
+                df = pd.read_csv(file_path, index_col=0)
+                # Create a heatmap for the correlation matrix
+                fig = px.imshow(df,
+                                x=df.columns,
+                                y=df.columns,
+                                color_continuous_scale='RdBu_r', # Red-Blue color scale, can be adjusted
+                                zmin=-1, zmax=1)  # Scale for correlation ranges from -1 to 1
+                fig.update_layout(xaxis_title='Features', yaxis_title='Features', plot_bgcolor='white')
+                st.plotly_chart(fig, use_container_width=True)
+
+            # pour print les histogrammes
+            elif image_type == "label" or image_type == "Labels_in_dataset":
+
+                # Create a bar plot for histogram data
+                if 'label' in df.columns:
+                    x_col = 'label'
+                elif 'Label' in df.columns:
+                    x_col = 'Label'
+                else:
+                    st.error("Required column 'Label' not found in the CSV file.")
+                    continue  # Skip this iteration
+
+                fig = px.bar(df, x=x_col, y='Frequency')
+                fig.update_layout(title='Histogram Title', xaxis_title='Label', yaxis_title='Frequency', plot_bgcolor='white')
+                st.plotly_chart(fig, use_container_width=True)  # Display the figure in Streamlit
+
+            elif image_type == "Flow_in_datasets":
+                # Create a single figure for all flow sensor curves
+                fig = go.Figure()
+
+                # Loop through each Flow_sensor and add a trace to the figure
+                for j in range(1, 5):
+                    # Extract the data for the current sensor
+                    sensor_data = df[f'Flow_sensor_{j}']
+                    fig.add_trace(
+                        go.Scatter(x=df.index, y=sensor_data, mode='lines', name=f'Flow_sensor_{j}')
+                    )
+
+                # Update layout for the figure
+                fig.update_layout(
+                    title_text="Flow Sensors Over Time",
+                    plot_bgcolor='white',
+                    legend=dict(
+                        title='Flow Sensors',
+                        orientation="h",
+                        yanchor="bottom",
+                        y=1.02,
+                        xanchor="right",
+                        x=1
+                    ),
+                    height=600,  # Adjust the height as needed
+                    xaxis_title="Index"
+                )
+
+                # Display the figure in Streamlit
+                st.plotly_chart(fig, use_container_width=True)
 
 
 
@@ -105,21 +103,23 @@ st.set_page_config(layout="wide")
 
 
 
-#             # # pour print les courbes
-#             # else:
-
-#             #         # Create a line or scatter plot for other time series data
-#             #         x_col = df.columns[0]  # Typically 'Time'
-#             #         y_col = df.columns[1]
-#             #         fig = px.line(df, x=x_col, y=y_col)  # Use px.scatter for scatter plot
-#             #         fig.update_layout(title=file_name.replace('.csv', ''), xaxis_title=x_col, yaxis_title=y_col, plot_bgcolor='white')
-#             #         st.plotly_chart(fig, use_container_width=True)
 
 
+            # pour print les courbes
+            else:
 
-#         # If PNG image, use st.image
-#         elif file_name.endswith('.png'):
-#             st.image(file_path, caption=file_name, use_column_width=True)
+                    # Create a line or scatter plot for other time series data
+                    x_col = df.columns[0]  # Typically 'Time'
+                    y_col = df.columns[1]
+                    fig = px.line(df, x=x_col, y=y_col)  # Use px.scatter for scatter plot
+                    fig.update_layout(title=file_name.replace('.csv', ''), xaxis_title=x_col, yaxis_title=y_col, plot_bgcolor='white')
+                    st.plotly_chart(fig, use_container_width=True)
+
+
+
+        # If PNG image, use st.image
+        elif file_name.endswith('.png'):
+            st.image(file_path, caption=file_name, use_column_width=True)
 
 
 
@@ -144,17 +144,17 @@ def physical_page():
 # Network Data Exploration Page
 def network_page():
     st.subheader("Network Data Exploration")
-    # root_directory = 'images/network'
+    root_directory = 'images/network'
 
-    # dataset_exploration_directory = os.path.join(root_directory, "Dataset_exploration")
-    # dataset_subdirectories = [d for d in os.listdir(dataset_exploration_directory) if os.path.isdir(os.path.join(dataset_exploration_directory, d))]
-    # image_type = st.selectbox("Choose an exploration visualization:", [""] + dataset_subdirectories)
+    dataset_exploration_directory = os.path.join(root_directory, "Dataset_exploration")
+    dataset_subdirectories = [d for d in os.listdir(dataset_exploration_directory) if os.path.isdir(os.path.join(dataset_exploration_directory, d))]
+    image_type = st.selectbox("Choose an exploration visualization:", [""] + dataset_subdirectories)
 
-    # if image_type:
-    #     st.subheader(image_type)
-    #     # Check if the selected directory is for correlation matrices
-    #     is_correlation_matrix = (image_type == "Correlation_matrix")
-    #     display_images_from_directory(os.path.join(dataset_exploration_directory, image_type), image_type)
+    if image_type:
+        st.subheader(image_type)
+        # Check if the selected directory is for correlation matrices
+        is_correlation_matrix = (image_type == "Correlation_matrix")
+        display_images_from_directory(os.path.join(dataset_exploration_directory, image_type), image_type)
 
 # Data Exploration Main Page
 def data_exploration_page():
@@ -172,16 +172,17 @@ def results_page():
     st.title("Results: bi-curve comparison")
 
     # Metrics options for the select box
-    metrics_options = ["Precision", "Recall", "TPR", "TNR", "Accuracy", "F1-score", "Balanced Accuracy", "Matthews Correlation Coefficient"]
+    metrics_options = ['precision', 'recall', 'TPR', 'TNR', 'accuracy', 'F1-score', 'balanced_accuracy', 'Matthews_Correlation_Coefficient']
 
     # Model options for the select box
-    model_options = ["KNN", "CART", "Random Forest", "XGBoost", "SVM", "MLP", "Multi-dataset"]
+    model_options = ['KNN', 'MLP', 'SVM', 'RF', 'CART', 'XGBoost']
 
     # datasets
-    dataset_options = ["Physical", "Network"]
+    # dataset_options = ["Physical", "Network"]
+    dataset_options = ["Physical"]
 
     # attack categories
-    attack_options = ["normal", "Dos", "Physical fault", "MITM", "scan"]
+    attack_options = ['normal', 'DoS', 'MITM', 'physical fault', 'scan']
 
     # Create a select box for choosing a metric
     selected_metric = st.selectbox("Choose a metric to display:", metrics_options)
@@ -203,10 +204,40 @@ def results_page():
         selected_dataset_2 = st.selectbox("Choose a dataset :", dataset_options, key=31)
         selected_attack_2 = st.selectbox("Choose an attack category :", attack_options, key=32)
 
-    # Display the selected metric and models
-    # st.write(f"Selected Metric: {selected_metric}")
-    # st.write(f"Selected Model in Curve 1: {selected_model_1}")
-    # st.write(f"Selected Model in Curve 2: {selected_model_2}")
+    data_size_dict = {
+        'full':1,
+        '/10':0.1,
+        '/100':0.01
+    }
+
+    df_physical_metrics = pd.read_pickle("preparation/physical/df_physical_metrics.pkl")
+
+    f1 = lambda size: df_physical_metrics.at[(selected_model_1, size, selected_attack_1, selected_metric), 'Value']
+    f2 = lambda size: df_physical_metrics.at[(selected_model_2, size, selected_attack_2, selected_metric), 'Value']
+
+    # Preparing data for plotting
+    x_values = list(data_size_dict.values())
+    y_values_f1 = [f1(key) for key in data_size_dict]
+    y_values_f2 = [f2(key) for key in data_size_dict]
+
+    # Create Plotly graph
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x_values, y=y_values_f1, mode='lines+markers', name='Curve 1'))
+    fig.add_trace(go.Scatter(x=x_values, y=y_values_f2, mode='lines+markers', name='Curve 2'))
+
+    # Update layout if needed
+    fig.update_layout(
+        title=f'Plot of Curve 1 vs Curve 2',
+        xaxis_title='Fraction of the dataset used',
+        yaxis_title=selected_metric,
+        xaxis=dict(
+            type='log',
+            autorange='reversed'
+        )
+    )
+
+    # Display in Streamlit
+    st.plotly_chart(fig)
 
     # Placeholder for displaying the results based on the selected metric and models
     # Here you can add your code to display the results for the chosen combinations
@@ -216,23 +247,23 @@ def results_page():
     # ... and so on for other combinations
 
     # Placeholder content can be replaced with actual result displaying logic
-    st.write("Placeholder content for displaying results based on the selected metric and models.")
-    col1, col2 = st.columns(2)
-    with col1:
-        st.subheader("Curve 1")
-        st.write(f"Selected Model in Curve 1: {selected_model_1}")
-        st.write(f"Selected Dataset in Curve 1: {selected_dataset_1}")
-        st.write(f"Selected Attack Category in Curve 1: {selected_attack_1}")
-        directory = "images/physical/Dataset_exploration/Heatmaps"
-        if selected_model_1 == "KNN":
-            with open(os.path.join(directory, f"Heatmap_{df_dict[1]}.pkl"), 'rb') as f:
-                fig = pickle.load(f)
-            st.plotly_chart(fig, use_container_width=True)
-    with col2:
-        st.subheader("Curve 2")
-        st.write(f"Selected Model in Curve 2: {selected_model_2}")
-        st.write(f"Selected Dataset in Curve 2: {selected_dataset_2}")
-        st.write(f"Selected Attack Category in Curve 2: {selected_attack_2}")
+    # st.write("Placeholder content for displaying results based on the selected metric and models.")
+    # col1, col2 = st.columns(2)
+    # with col1:
+    #     st.subheader("Curve 1")
+    #     st.write(f"Selected Model in Curve 1: {selected_model_1}")
+    #     st.write(f"Selected Dataset in Curve 1: {selected_dataset_1}")
+    #     st.write(f"Selected Attack Category in Curve 1: {selected_attack_1}")
+    #     directory = "images/physical/Dataset_exploration/Heatmaps"
+    #     if selected_model_1 == "KNN":
+    #         with open(os.path.join(directory, f"Heatmap_{df_dict[1]}.pkl"), 'rb') as f:
+    #             fig = pickle.load(f)
+    #         st.plotly_chart(fig, use_container_width=True)
+    # with col2:
+    #     st.subheader("Curve 2")
+    #     st.write(f"Selected Model in Curve 2: {selected_model_2}")
+    #     st.write(f"Selected Dataset in Curve 2: {selected_dataset_2}")
+    #     st.write(f"Selected Attack Category in Curve 2: {selected_attack_2}")
 
 
 # Main function
