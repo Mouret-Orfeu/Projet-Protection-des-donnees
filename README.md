@@ -6,6 +6,8 @@
 pip install -r requirements.txt
 ```
 
+Penser à mettre le dossier `dataset` à la racine du projet.
+
 ## Exéuter et voir notre exploration des données
 
 - `physical_exploration.ipynb` : exploration des données physiques
